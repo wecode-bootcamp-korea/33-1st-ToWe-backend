@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.models import TimeStampModel
-from products.models import Product
+# from products.models import Product
 
 class User(TimeStampModel):
     name         = models.CharField(max_length = 45)
@@ -15,7 +15,7 @@ class User(TimeStampModel):
 
 class Like(TimeStampModel):
     user_id    = models.ForeignKey(User, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_id = models.ForeignKey("products.Product", on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'likes'

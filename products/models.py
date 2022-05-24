@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.models import TimeStampModel
-from users.models import User
+# from users.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=45)
@@ -26,7 +26,7 @@ class Product(TimeStampModel):
     class Meta:
         db_table = 'products'
 
-class Iamge(models.Model):
+class Image(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     url     = models.CharField(max_length=260)
 
@@ -40,7 +40,7 @@ class Color(models.Model):
         db_table = 'colors'
 
 class Review(TimeStampModel):
-    user    = models.ForeignKey(User, on_delete=models.CASCADE)
+    user    = models.ForeignKey("users.User", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     content = models.TextField()
 

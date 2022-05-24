@@ -9,7 +9,7 @@ class Category(models.Model):
     class Meta:
         db_table = 'categories'
 
-class Target_age(models.Model):
+class TargetAge(models.Model):
     age = models.IntegerField()
 
     class Meta:

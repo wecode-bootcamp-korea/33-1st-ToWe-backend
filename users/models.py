@@ -12,9 +12,9 @@ class User(TimeStampModel):
     class Meta:
         db_table = 'users'
 
-class Like(TimeStampModel):
+class LikeProduct(TimeStampModel):
     user_id    = models.ForeignKey(User, on_delete=models.CASCADE)
     product_id = models.ForeignKey("products.Product", on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'likes'
+        db_table = 'like_products'

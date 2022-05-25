@@ -25,18 +25,18 @@ class Product(TimeStampModel):
     class Meta:
         db_table = 'products'
 
-class Image(models.Model):
+class ImageUrl(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     url     = models.CharField(max_length=260)
 
     class Meta:
-        db_table = 'images'
+        db_table = 'image_urls'
 
-class Color(models.Model):
+class OptionColor(models.Model):
     color = models.CharField(max_length=20)
 
     class Meta:
-        db_table = 'colors'
+        db_table = 'option_colors'
 
 class Review(TimeStampModel):
     user    = models.ForeignKey("users.User", on_delete=models.CASCADE)
@@ -48,7 +48,7 @@ class Review(TimeStampModel):
 
 class ProductOption(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    color   = models.ForeignKey(Color, on_delete=models.CASCADE)
+    color   = models.ForeignKey(OptionColor, on_delete=models.CASCADE)
     stock   = models.IntegerField()
 
     class Meta:

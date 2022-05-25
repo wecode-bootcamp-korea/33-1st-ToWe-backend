@@ -20,7 +20,8 @@ class Product(TimeStampModel):
     name        = models.CharField(max_length=45)
     price       = models.DecimalField(max_digits=9, decimal_places=2)
     description = models.TextField()
-    thumbnail   = models.CharField(max_length=260)
+    thumbnail_1 = models.CharField(max_length=260)
+    thumbnail_2 = models.CharField(max_length=260, null=True)
 
     class Meta:
         db_table = 'products'

@@ -1,7 +1,6 @@
 from django.db import models
 
 from core.models import TimeStampModel
-# from products.models import Product
 
 class User(TimeStampModel):
     name         = models.CharField(max_length = 45)

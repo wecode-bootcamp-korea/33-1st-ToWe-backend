@@ -1,7 +1,6 @@
 from django.db import models
 
 from core.models import TimeStampModel
-# from users.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=45)
@@ -17,7 +16,7 @@ class TargetAge(models.Model):
 
 class Product(TimeStampModel):
     category    = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    target_age  = models.ForeignKey(Target_age, on_delete=models.SET_NULL, null=True)
+    target_age  = models.ForeignKey(TargetAge, on_delete=models.SET_NULL, null=True)
     name        = models.CharField(max_length=45)
     price       = models.DecimalField(max_digits=9, decimal_places=2)
     description = models.TextField()

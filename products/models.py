@@ -15,19 +15,18 @@ class TargetAge(models.Model):
         db_table = 'target_ages'
 
 class Product(TimeStampModel):
-    category    = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    target_age  = models.ForeignKey(TargetAge, on_delete=models.SET_NULL, null=True)
-    name        = models.CharField(max_length=45)
-    price       = models.DecimalField(max_digits=9, decimal_places=2)
-    description = models.TextField()
-    thumbnail_1 = models.CharField(max_length=260)
-    thumbnail_2 = models.CharField(max_length=260, null=True)
+    category          = models.ForeignKey("products.Category", on_delete=models.SET_NULL, null=True)
+    target_age        = models.ForeignKey("products.TargetAge", on_delete=models.SET_NULL, null=True)
+    name              = models.CharField(max_length=45)
+    price             = models.DecimalField(max_digits=9, decimal_places=2)
+    description       = models.TextField()
+    thumbnail_img_url = models.CharField(max_length=260)
 
     class Meta:
         db_table = 'products'
 
 class ImageUrl(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
     url     = models.CharField(max_length=260)
 
     class Meta:
@@ -41,15 +40,15 @@ class OptionColor(models.Model):
 
 class Review(TimeStampModel):
     user    = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
     content = models.TextField()
 
     class Meta:
         db_table = 'reviews'
 
 class ProductOption(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    color   = models.ForeignKey(OptionColor, on_delete=models.CASCADE)
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
+    color   = models.ForeignKey("products.OptionColor", on_delete=models.CASCADE)
     stock   = models.IntegerField()
 
     class Meta:

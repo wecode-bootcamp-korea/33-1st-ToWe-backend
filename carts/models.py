@@ -5,7 +5,7 @@ from products.models import ProductOption
 
 class Cart(TimeStampModel):
     user     = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    product  = models.ForeignKey(ProductOption, on_delete=models.CASCADE)
+    product  = models.ForeignKey("products.ProductOption", on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     class Meta:

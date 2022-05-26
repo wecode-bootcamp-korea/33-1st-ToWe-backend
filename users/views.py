@@ -1,14 +1,11 @@
-import json, bcrypt, jwt
-from datetime import datetime, timedelta
+import json, bcrypt
 
 from django.views import View
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
-from django.conf import settings
 
 from .models import User
 from .validator import validate_email, validate_password
-from towe.utils import login_decorator
 
 class SignupView(View):
     def post(self, request):
@@ -44,44 +41,3 @@ class SignupView(View):
 
         except ValidationError as verr :
             return JsonResponse({"MESSAGE": verr.message}, status=400)
-
-class LoginView(View):
-    def post(self, request):
-        
-        try :
-            login_data = json.loads(request.body)
-            email      = login_data["email"]
-            password   = login_data["password"]
-
-            if not User.objects.filter(email=email).exists() :
-                raise ValidationError("INVALID_USER")
-
-            user = User.objects.get(email=email)
-            if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')) :
-                raise ValidationError("INCORRECT_PASSWORD")
-
-            token = jwt.encode( {'id': user.id, 'exp':datetime.utcnow()+timedelta(days=3)}, settings.SECRET_KEY, settings.ALGORITHM)
-
-            return JsonResponse({"TOKEN": token}, status=201)
-
-        except json.decoder.JSONDecodeError :
-            return JsonResponse({"MESSAGE": "JSON_DECODE_ERROR"}, status=400)
-
-        except KeyError :
-            return JsonResponse({"MESSAGE": "KEY_ERROR"}, status=400)
-
-        except ValidationError as verr :
-            return JsonResponse({"MESSAGE": verr.message}, status=400)
-
-class MypageView(View):
-    @login_decorator
-    def get(self, request):
-        user = request.user
-        result = [{
-            'email'       : user.email,
-            'name'        : user.name,
-            'phone_number': user.phone_number,
-            'address' : user.address
-        }]
-
-        return JsonResponse({'result':result}, status=200)

@@ -74,14 +74,14 @@ class LoginView(View):
 class MyPageView(View):
     @login_decorator
     def get(self, request):
-
-        result = []
-        user = request.user
-
-        result.append({
-            'id': user.id,
-            'name' : user.name,
-            'phone_number':user.phone_number,
-            
-        })
         
+        user = request.user
+        result = [{
+            'id'          : user.id,
+            'email'       : user.email,
+            'name'        : user.name,
+            'phone_number': user.phone_number,
+            'address'     : user.address
+        }]
+
+        return JsonResponse({"result":result}, status=200)

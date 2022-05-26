@@ -1,4 +1,5 @@
 import json, bcrypt, jwt
+from unicodedata import name
 from datetime import datetime, timedelta
 
 from django.views import View
@@ -8,6 +9,7 @@ from django.conf import settings
 
 from .models import User
 from .validator import validate_email, validate_password
+from towe.utils import login_decorator
 
 class SignupView(View):
     def post(self, request):
@@ -68,3 +70,18 @@ class LoginView(View):
 
         except ValidationError as verr :
             return JsonResponse({"MESSAGE": verr.message}, status=400)
+
+class MyPageView(View):
+    @login_decorator
+    def get(self, request):
+
+        result = []
+        user = request.user
+
+        result.append({
+            'id': user.id,
+            'name' : user.name,
+            'phone_number':user.phone_number,
+            
+        })
+        

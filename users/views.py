@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from .models import User
+from towe.utils import login_decorator
 from .validator import validate_email, validate_password
 
 class SignupView(View):
@@ -70,3 +71,18 @@ class LoginView(View):
 
         except ValidationError as verr :
             return JsonResponse({"MESSAGE": verr.message}, status=400)
+
+class UserDetailView(View):
+    @login_decorator
+    def get(self, request):
+        
+        user = request.user
+        result = {
+            'id'          : user.id,
+            'email'       : user.email,
+            'name'        : user.name,
+            'phone_number': user.phone_number,
+            'address'     : user.address
+        }
+
+        return JsonResponse({"result":result}, status=200)

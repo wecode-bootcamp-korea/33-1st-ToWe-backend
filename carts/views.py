@@ -12,17 +12,17 @@ class CartView(View):
 
         data = json.loads(request.body)
 
-        product_id = data["product_id"]
-        quantity = data["quantity"]
+        product_id = 
+        color_id = 
 
-        product_option_id = 
-        ProductOption.objects.filter(
+        # product_option_id
+
+        product = ProductOption.objects.filter(product_id=data["product_id"] and color_id=data["color_id"])
 
         user = request.user
 
         Cart.objects.create(
-            user = user.id
-        
-
-
+            user = request.user,
+            product = product,
+            quantity = quantity = data["quantity"]
         )

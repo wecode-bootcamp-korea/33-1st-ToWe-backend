@@ -27,39 +27,42 @@ class ProductDetailView(View):
 class ProductListView(View):
 
     def get(self, request):
-        category = request.GET.get('category')
-        sort     = request.GET.get('sort', 'id')
-        search   = request.GET.get('search')
-        offset   = int(request.GET.get('offset', 0))
-        limit    = int(request.GET.get('limit', 6))
+        try:
+            category = request.GET.get('category')
+            sort     = request.GET.get('sort', 'id')
+            search   = request.GET.get('search')
+            offset   = int(request.GET.get('offset', 0))
+            limit    = int(request.GET.get('limit', 6))
 
-        sort_dic = {
-            'id'        : '-id',
-            'price_high': '-price',
-            'price_low' : 'price',
-            'age_high'  : '-target_age_id__age',
-            'age_low'   : 'target_age_id__age'
-        }
-        
-        q = Q()
+            sort_dic = {
+                'id'        : '-id',
+                'price_high': '-price',
+                'price_low' : 'price',
+                'age_high'  : '-target_age_id__age',
+                'age_low'   : 'target_age_id__age'
+            }
+            
+            q = Q()
 
-        if category:
-            q &= Q(category__name=category)
+            if category:
+                q &= Q(category__name=category)
 
-        if search:
-            q &= Q(name__contains=search)
-        
-        products = Product.objects.filter(q).order_by(sort_dic[sort])[offset:offset+limit]
+            if search:
+                q &= Q(name__contains=search)
+            
+            products = Product.objects.filter(q).order_by(sort_dic[sort])[offset:offset+limit]
 
-        product_list = [
-            {
-                "id"           : product.id,
-                "name"         : product.name,
-                "price"        : product.price,
-                "thumbnail_url": product.thumbnail_img_url,
-                "hover_img"    : product.imageurl_set.first().url,
-            }      
-            for product in products
-        ]
+            product_list = [
+                {
+                    "id"           : product.id,
+                    "name"         : product.name,
+                    "price"        : product.price,
+                    "thumbnail_url": product.thumbnail_img_url,
+                    "hover_img"    : product.imageurl_set.first().url,
+                }      
+                for product in products
+            ]
 
-        return JsonResponse({'results': product_list}, status = 200)
+            return JsonResponse({'results': product_list}, status = 200)
+        except KeyError:
+            return JsonResponse({"MESSAGE": "KEY_ERROR"}, status=400) 

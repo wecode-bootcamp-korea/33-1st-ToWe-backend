@@ -9,8 +9,8 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from .models import User
-from .validator import validate_email, validate_password
 from towe.utils import login_decorator
+from .validator import validate_email, validate_password
 
 class SignupView(View):
     def post(self, request):

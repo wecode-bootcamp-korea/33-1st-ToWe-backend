@@ -77,12 +77,12 @@ class MyPageView(View):
     def get(self, request):
         
         user = request.user
-        result = [{
+        result = {
             'id'          : user.id,
             'email'       : user.email,
             'name'        : user.name,
             'phone_number': user.phone_number,
             'address'     : user.address
-        }]
+        }
 
         return JsonResponse({"result":result}, status=200)

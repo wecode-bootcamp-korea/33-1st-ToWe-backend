@@ -15,11 +15,14 @@ class CartView(View):
         product_id = data["product_id"]
         quantity = data["quantity"]
 
-        Pro
+        product_option_id = 
+        ProductOption.objects.filter(
+
         user = request.user
 
-
         Cart.objects.create(
-            user_id = user.id
+            user = user.id
+        
+
 
         )

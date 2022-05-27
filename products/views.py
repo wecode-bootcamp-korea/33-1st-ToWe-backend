@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views import View
+from django.db.models import Q
 
 from products.models import Product
 
@@ -22,4 +23,43 @@ class ProductDetailView(View):
             return JsonResponse({'results': product_detail}, status =200)
         except Product.DoesNotExist:
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
+           
+class ProductListView(View):
 
+    def get(self, request):
+        category = request.GET.get('category')
+        sort     = request.GET.get('sort', 'id')
+        search   = request.GET.get('search')
+        offset   = int(request.GET.get('offset', 0))
+        limit    = int(request.GET.get('limit', 6))
+
+        sort_dic = {
+            'id'  : '-id',
+            'price_high': '-price',
+            'price_low' : 'price',
+            'age_high' : '-target_age_id__age',
+            'age_low' : 'target_age_id__age'
+        }
+        
+        q = Q()
+
+        if category:
+            q &= Q(category__name=category)
+
+        if search:
+            q &= Q(name__contains=search)
+        
+        products = Product.objects.filter(q).order_by(sort_dic[sort])[offset:offset+limit]
+
+        product_list = [
+            {
+                "id"           : product.id,
+                "name"         : product.name,
+                "price"        : product.price,
+                "thumbnail_url": product.thumbnail_img_url,
+                "hover_img"    : product.imageurl_set.first().url,
+            }      
+            for product in products
+        ]
+
+        return JsonResponse({'results': product_list}, status = 200)

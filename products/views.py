@@ -10,16 +10,15 @@ class ProductDetailView(View):
             product = Product.objects.get(id = product_id)
             images  = [image.url for image in product.imageurl_set.all()]
             colors  = [productoption.color.color for productoption in product.productoption_set.all()]
-            product_detail = [
-                {
-                    'product_id' : product.id,
-                    'name'       : product.name,
-                    'price'      : product.price,
-                    'description': product.description,
-                    'image_url'  : images,
-                    'color'      : colors,
-                }
-            ]
+            product_detail = {
+                'product_id' : product.id,
+                'name'       : product.name,
+                'price'      : product.price,
+                'description': product.description,
+                'image_url'  : images,
+                'color'      : colors,
+            }
+            
             return JsonResponse({'results': product_detail}, status =200)
         except Product.DoesNotExist:
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)

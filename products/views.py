@@ -34,11 +34,11 @@ class ProductListView(View):
         limit    = int(request.GET.get('limit', 6))
 
         sort_dic = {
-            'id'  : '-id',
+            'id'        : '-id',
             'price_high': '-price',
             'price_low' : 'price',
-            'age_high' : '-target_age_id__age',
-            'age_low' : 'target_age_id__age'
+            'age_high'  : '-target_age_id__age',
+            'age_low'   : 'target_age_id__age'
         }
         
         q = Q()

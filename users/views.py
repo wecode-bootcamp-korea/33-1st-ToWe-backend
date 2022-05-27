@@ -1,15 +1,16 @@
-import json, bcrypt, jwt
-from unicodedata import name
+import json
 from datetime import datetime, timedelta
 
+import jwt
+import bcrypt
 from django.views import View
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from .models import User
-from .validator import validate_email, validate_password
 from towe.utils import login_decorator
+from .validator import validate_email, validate_password
 
 class SignupView(View):
     def post(self, request):
@@ -53,11 +54,8 @@ class LoginView(View):
             login_data = json.loads(request.body)
             email      = login_data["email"]
             password   = login_data["password"]
+            user       = User.objects.get(email=email)
 
-            if not User.objects.filter(email=email).exists() :
-                raise ValidationError("INVALID_USER")
-
-            user = User.objects.get(email=email)
             if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')) :
                 raise ValidationError("INCORRECT_PASSWORD")
 
@@ -67,6 +65,9 @@ class LoginView(View):
 
         except KeyError :
             return JsonResponse({"MESSAGE": "KEY_ERROR"}, status=400)
+        
+        except User.DoesNotExist :
+            return JsonResponse({"MESSAGE": "INVALID_USER"}, status=400)
 
         except ValidationError as verr :
             return JsonResponse({"MESSAGE": verr.message}, status=400)

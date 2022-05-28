@@ -76,7 +76,7 @@ class UserDetailView(View):
     @login_decorator
     def get(self, request):
         
-        user = request.user
+        user   = request.user
         result = {
             'id'          : user.id,
             'email'       : user.email,

@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from products.models import Product
 
@@ -40,7 +40,8 @@ class ProductListView(View):
             'price_high': '-price',
             'price_low' : 'price',
             'age_high'  : '-target_age_id__age',
-            'age_low'   : 'target_age_id__age'
+            'age_low'   : 'target_age_id__age',
+            'best'      : '-like_count'
         }
 
         if not sort_dict.get(sort):
@@ -54,7 +55,7 @@ class ProductListView(View):
         if search:
             q &= Q(name__contains=search)
         
-        products = Product.objects.filter(q).order_by(sort_dict[sort])[offset:offset+limit]
+        products = Product.objects.filter(q).annotate(like_count=Count('likeproduct')).order_by(sort_dict[sort])[offset:offset+limit]
 
         product_list = [
             {

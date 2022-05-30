@@ -1,5 +1,10 @@
 from django.views import View
 
-class CartView(View):
+from towe.utils import login_decorator
+from .models import Cart
 
-    def 
+class CartView(View):
+    @login_decorator
+    def delete(self, request, cart_id):
+
+        pass

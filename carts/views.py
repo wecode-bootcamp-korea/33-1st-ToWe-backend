@@ -7,4 +7,5 @@ class CartView(View):
     @login_decorator
     def delete(self, request, cart_id):
 
-        pass
+        cart = Cart.objects.get(id=cart_id)
+        cart.delete()

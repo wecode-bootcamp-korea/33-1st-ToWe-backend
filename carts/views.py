@@ -12,11 +12,13 @@ class CartView(View):
         for cart in Cart.objects.filter(user_id=request.user.id):
             product = cart.product
             result.append({
-                'id':cart.id,
-                'product_name':cart.product.product.name,
-                'color':cart.product.color.color,
-                'price':cart.product.product.price,
-                'thumbnail_url':cart.product.product.thumbnail_img_url
+                'cart_id'      : cart.id,
+                'product_id'   : cart.product.product.id,
+                'product_name' : cart.product.product.name,
+                'color'        : cart.product.color.color,
+                'price'        : cart.product.product.price,
+                'quantity'     : cart.quantity,
+                'thumbnail_url': cart.product.product.thumbnail_img_url
             })
         
         return JsonResponse({'result':result}, status=200)

@@ -72,7 +72,7 @@ class LoginView(View):
         except ValidationError as verr :
             return JsonResponse({"MESSAGE": verr.message}, status=400)
 
-class MyPageView(View):
+class UserDetailView(View):
     @login_decorator
     def get(self, request):
         

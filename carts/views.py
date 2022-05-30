@@ -10,7 +10,6 @@ class CartView(View):
         
         result = []
         for cart in Cart.objects.filter(user_id=request.user.id):
-            product = cart.product
             result.append({
                 'cart_id'      : cart.id,
                 'product_id'   : cart.product.product.id,

@@ -12,8 +12,6 @@ class CartView(View):
     def post(self, request):
         data = json.loads(request.body)
 
-        price = Product.objects.get(id=data["product_id"]).price
-
         optioned_product = ProductOption.objects.get(product_id = data["product_id"], color_id=data["color_id"])
 
         cart, is_created = Cart.objects.get_or_create(

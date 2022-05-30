@@ -24,4 +24,4 @@ class CartView(View):
             cart.quantity += data["quantity"]
             cart.save()
 
-        return JsonResponse({"MESSAGE":"SUCCESS"}, status=201)
+        return JsonResponse({"MESSAGE":"SUCCESS"}, status=200)

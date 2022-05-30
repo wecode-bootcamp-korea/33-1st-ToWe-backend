@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.views import View
 
-from products.models import Product
-
+from products.models import Product, Review
+from towe.utils import login_decorator
 
 class ProductDetailView(View):
     def get(self, request, product_id):
@@ -23,3 +23,20 @@ class ProductDetailView(View):
         except Product.DoesNotExist:
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
 
+class ReviewView(View):
+    @login_decorator
+    def get(self, request):
+        
+        reviews = Review.objects.filter(user_id=request.user.id)
+        result  = []
+        for review in reviews:
+            result.append({
+                'review_id'   : review.id,
+                'user_name'   : review.user.name,
+                'product_name': review.product.name,
+                'content'     : review.content,
+                'created_at'  : review.created_at,
+                'updated_at'  : review.updated_at
+            })
+
+        return JsonResponse({'result':result}, status=200)

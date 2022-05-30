@@ -28,9 +28,7 @@ class ProductDetailView(View):
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
            
 class ProductListView(View):
-
-    def get(self, request):
-        
+    def get(self, request):        
         category = request.GET.get('category')
         sort     = request.GET.get('sort', 'id')
         search   = request.GET.get('search')

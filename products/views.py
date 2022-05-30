@@ -28,13 +28,16 @@ class ProductDetailView(View):
 class ReviewView(View):
     @login_decorator
     def post(self, request):
+        try:
+            data    = json.loads(request.body)
+            product = Product.objects.get(id=data["product_id"])
+
+            Review.objects.create(
+                user    = request.user,
+                product = product,
+                content = data["content"])
+
+            return JsonResponse({"MESSAGE":"SUCCESS"}, status=201)
         
-        data    = json.loads(request.body)
-        product = Product.objects.get(id=data["product_id"])
-
-        Review.objects.create(
-            user    = request.user,
-            product = product,
-            content = data["content"])
-
-        return JsonResponse({"MESSAGE":"SUCCESS"}, status=201)
+        except Product.DoesNotExist:
+            return JsonResponse({"MESSAGE":"PRODUCT_DOES_NOT_EXIST"}, status=400)

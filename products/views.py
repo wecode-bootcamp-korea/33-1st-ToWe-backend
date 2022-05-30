@@ -10,14 +10,17 @@ class ProductDetailView(View):
         try:
             product = Product.objects.get(id = product_id)
             images  = [image.url for image in product.imageurl_set.all()]
-            colors  = [productoption.color.color for productoption in product.productoption_set.all()]
+            colors  = [{
+                'color_id' : productoption.color.id,
+                'color': productoption.color.color
+            } for productoption in product.productoption_set.all()]
             product_detail = {
                 'product_id' : product.id,
                 'name'       : product.name,
                 'price'      : product.price,
                 'description': product.description,
                 'image_url'  : images,
-                'color'      : colors,
+                'colors'      : colors,
             }
             
             return JsonResponse({'results': product_detail}, status =200)
@@ -43,7 +46,7 @@ class ProductListView(View):
         }
 
         if not sort_dict.get(sort):
-            return JsonResponse({"MESSAGE": "KEY_ERROR"}, status=400)  
+            return JsonResponse({"MESSAGE": "SORT_KEY_ERROR"}, status=400)  
         
         q = Q()
 

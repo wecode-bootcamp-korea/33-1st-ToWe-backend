@@ -33,7 +33,7 @@ class ReviewView(View):
         product = Product.objects.get(id=data["product_id"])
 
         Review.objects.create(
-            user = request.user,
+            user    = request.user,
             product = product,
             content = data["content"])
 

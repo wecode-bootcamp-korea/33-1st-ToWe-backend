@@ -1,8 +1,10 @@
+import json
+
 from django.http import JsonResponse
 from django.views import View
 
-from products.models import Product
-
+from products.models import Product, Review
+from towe.utils import login_decorator
 
 class ProductDetailView(View):
     def get(self, request, product_id):
@@ -23,3 +25,16 @@ class ProductDetailView(View):
         except Product.DoesNotExist:
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
 
+class ReviewView(View):
+    @login_decorator
+    def post(self, request):
+        
+        data    = json.loads(request.body)
+        product = Product.objects.get(id=data["product_id"])
+
+        Review.objects.create(
+            user = request.user,
+            product = product,
+            content = data["content"])
+
+        return JsonResponse({"MESSAGE":"SUCCESS"}, status=201)

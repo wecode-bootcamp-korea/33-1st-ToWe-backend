@@ -20,8 +20,8 @@ class SignupView(View):
             email       = signup_data["email"]
             password    = signup_data["password"]
             
-            if not validate_email(email) :
-                raise ValidationError("INVALID_EMAIL")
+            validate_email(email)
+            validate_password(password)
 
             if not validate_password(password) :
                 raise ValidationError("INVALID_PASSWORD")

@@ -31,6 +31,10 @@ class ProductDetailView(View):
            
 class ProductListView(View):
     def get(self, request):        
+        # GET :8000/products?category=coffee
+        # request.POST, request.GET.__dir__()
+        # print(request.GET) QueryDict
+
         category = request.GET.get('category')
         sort     = request.GET.get('sort', 'id')
         search   = request.GET.get('search')
@@ -51,14 +55,19 @@ class ProductListView(View):
             return JsonResponse({"MESSAGE": "SORT_KEY_ERROR"}, status=400)  
         
         q = Q()
+        # print() 습관화
+        # sort.__dir__()
 
         if category:
             q &= Q(category__name=category)
 
         if search:
             q &= Q(name__contains=search)
+
+        # Product.objects.filter()
         
         products = Product.objects.filter(q).annotate(like_count=Count('likeproduct')).order_by(sort_dict[sort])[offset:offset+limit]
+        # annotate 주석
 
         product_list = [
             {

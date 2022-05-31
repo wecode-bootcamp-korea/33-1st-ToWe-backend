@@ -29,6 +29,12 @@ class ProductDetailView(View):
         except Product.DoesNotExist:
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
            
+# Public ProductListView
+# no decorator
+
+# Private ProductListView
+# login_decorator 사용
+
 class ProductListView(View):
     def get(self, request):        
         category = request.GET.get('category')

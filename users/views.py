@@ -7,7 +7,6 @@ from django.views import View
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
-
 from .models import LikeProduct, User
 from products.models import Product
 from towe.utils import login_decorator
@@ -90,16 +89,21 @@ class UserDetailView(View):
 
 class LikeView(View):
     @login_decorator
+    # PATCH, PUT
+    # def put
+    # POST :8000/products/1/review
+    # POST :8000/products/<int:product_id>/review
+    # PUT :8000/products/1/like
+    # def put(self, request, product_id):
     def post(self, request):
         try:
             data = json.loads(request.body)
             user = request.user
             product_id = data['product_id']
 
-            if not Product.objects.filter(id = product_id).exists():
-                return JsonResponse({'message':'PRODUCT_DOES_NOT_EXIST'}, status=404)
-
             product = Product.objects.get(id = product_id)
+
+            # flag => is_created
             like, flag = LikeProduct.objects.get_or_create(
                 product_id = product.id,
                 user_id = user.id 
@@ -107,16 +111,15 @@ class LikeView(View):
             
             if not flag:
                 like.delete()
-                message = 'SUCCESS_delete_like'
-                status = 200
+                message = 'DELETED'
+                status = 204 # No Content
             else:
                 like.save()
-                message = 'SUCCESS_create_like'
+                message = 'CREATED'
                 status = 201
                 
             return JsonResponse({
                 'message': message,
-                'flag': flag
             }, status=status)
             
 

@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from .models import User
+from products.models import Review
 from towe.utils import login_decorator
 from .validator import validate_email, validate_password
 
@@ -82,7 +83,14 @@ class UserDetailView(View):
             'email'       : user.email,
             'name'        : user.name,
             'phone_number': user.phone_number,
-            'address'     : user.address
+            'address'     : user.address,
+            'reviews'     : [{
+                'review_id'   : review.id,
+                'product_name': review.product.name,
+                'content'     : review.content,
+                'created_at'  : review.created_at,
+                'updated_at'  : review.updated_at
+            } for review in Review.objects.filter(user_id=user.id)]
         }
 
         return JsonResponse({"result":result}, status=200)

@@ -24,19 +24,14 @@ class ProductDetailView(View):
             return JsonResponse({'message': 'DOES_NOT_EXIST'}, status = 400)
 
 class ReviewView(View):
-    @login_decorator
-    def get(self, request):
-        
-        reviews = Review.objects.filter(user_id=request.user.id)
-        result  = []
-        for review in reviews:
-            result.append({
-                'review_id'   : review.id,
-                'user_name'   : review.user.name,
-                'product_name': review.product.name,
-                'content'     : review.content,
-                'created_at'  : review.created_at,
-                'updated_at'  : review.updated_at
-            })
-
+    def get(self, request, product_id):
+    
+        result = [{
+            'review_id' : review.id,
+            'user_name' : review.user.name,
+            'content'   : review.content,
+            'created_at': review.created_at,
+            'updated_at': review.updated_at
+        } for review in Review.objects.filter(product_id=product_id)]
+    
         return JsonResponse({'result':result}, status=200)

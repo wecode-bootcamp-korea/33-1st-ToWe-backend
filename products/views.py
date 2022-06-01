@@ -5,6 +5,7 @@ from django.views import View
 from django.db.models import Q, Count
 
 from products.models import Product, Review
+from users.models import LikeProduct
 from towe.utils import login_decorator
 
 class ProductDetailView(View):
@@ -72,6 +73,35 @@ class ProductListView(View):
         ]
 
         return JsonResponse({'results': product_list}, status = 200)
+
+class LikeView(View):
+    @login_decorator
+    def put(self, request, product_id):
+        try:
+            user = request.user
+            product = Product.objects.get(id = product_id)
+            like, is_created = LikeProduct.objects.get_or_create(
+                product_id = product.id,
+                user_id = user.id 
+            )
+            
+            if not is_created:
+                like.delete()
+                message = 'DELETED'
+                status = 204
+            else:
+                like.save()
+                message = 'CREATED'
+                status = 201
+                
+            return JsonResponse({
+                'message': message
+            }, status=status)            
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+        except Product.DoesNotExist:
+            return JsonResponse({'message':'PRODUCT_DOES_NOT_EXIST'}, status=404)
         
 class ReviewView(View):
     @login_decorator

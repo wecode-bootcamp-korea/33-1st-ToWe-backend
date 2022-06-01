@@ -8,8 +8,7 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
-from .models import LikeProduct, User
-from products.models import Product
+from .models import  User
 from towe.utils import login_decorator
 from .validator import validate_email, validate_password
 
@@ -88,37 +87,3 @@ class UserDetailView(View):
 
         return JsonResponse({"result":result}, status=200)
 
-class LikeView(View):
-    @login_decorator
-    def post(self, request):
-        try:
-            data = json.loads(request.body)
-            user = request.user
-            product_id = data['product_id']
-
-            if not Product.objects.filter(id = product_id).exists():
-                return JsonResponse({'message':'PRODUCT_DOES_NOT_EXIST'}, status=404)
-
-            product = Product.objects.get(id = product_id)
-            like, flag = LikeProduct.objects.get_or_create(
-                product_id = product.id,
-                user_id = user.id 
-            )
-            
-            if not flag:
-                like.delete()
-                message = 'SUCCESS_delete_like'
-                status = 200
-            else:
-                like.save()
-                message = 'SUCCESS_create_like'
-                status = 201
-                
-            return JsonResponse({
-                'message': message,
-                'flag': flag
-            }, status=status)
-            
-
-        except KeyError:
-            return JsonResponse({'message': 'KEY_ERROR'}, status=400)

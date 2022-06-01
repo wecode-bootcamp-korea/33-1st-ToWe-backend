@@ -74,6 +74,18 @@ class ProductListView(View):
         return JsonResponse({'results': product_list}, status = 200)
         
 class ReviewView(View):
+    def get(self, request, product_id):
+    
+        result = [{
+            'review_id' : review.id,
+            'user_name' : review.user.name,
+            'content'   : review.content,
+            'created_at': review.created_at,
+            'updated_at': review.updated_at
+        } for review in Review.objects.filter(product_id=product_id)]
+    
+        return JsonResponse({'result':result}, status=200)
+
     @login_decorator
     def post(self, request, product_id):
         try:

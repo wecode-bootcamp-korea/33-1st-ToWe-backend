@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'products',
     'carts',
     'core',
+    'orders',
     'django_extensions',
     'corsheaders',
     # 'django.contrib.admin',

@@ -104,36 +104,29 @@ class LikeView(View):
             return JsonResponse({'message':'PRODUCT_DOES_NOT_EXIST'}, status=404)
         
 class ReviewView(View):
+    def get(self, request, product_id):
+    
+        result = [{
+            'review_id' : review.id,
+            'user_name' : review.user.name,
+            'content'   : review.content,
+            'created_at': review.created_at,
+            'updated_at': review.updated_at
+        } for review in Review.objects.filter(product_id=product_id)]
+    
+        return JsonResponse({'result':result}, status=200)
+
     @login_decorator
-    def post(self, request):
+    def post(self, request, product_id):
         try:
             data    = json.loads(request.body)
-            product = Product.objects.get(id=data["product_id"])
 
             Review.objects.create(
                 user    = request.user,
-                product = product,
+                product = Product.objects.get(id=product_id),
                 content = data["content"])
 
             return JsonResponse({"MESSAGE":"SUCCESS"}, status=201)
         
         except Product.DoesNotExist:
             return JsonResponse({"MESSAGE":"PRODUCT_DOES_NOT_EXIST"}, status=400)
-
-    @login_decorator
-    def get(self, request):
-        
-        reviews = Review.objects.filter(user_id=request.user.id)
-        result  = []
-        for review in reviews:
-            result.append({
-                'review_id'   : review.id,
-                'user_name'   : review.user.name,
-                'product_name': review.product.name,
-                'content'     : review.content,
-                'created_at'  : review.created_at,
-                'updated_at'  : review.updated_at
-            })
-
-        return JsonResponse({'result':result}, status=200)
-

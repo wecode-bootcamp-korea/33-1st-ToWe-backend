@@ -98,3 +98,4 @@ class UserDetailView(View):
         }
 
         return JsonResponse({"result":result}, status=200)
+

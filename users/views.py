@@ -78,6 +78,13 @@ class UserDetailView(View):
     def get(self, request):
         
         user   = request.user
+        """
+        user info
+        :8000/users/info
+
+        user's reviews
+        :8000/users/reviews
+        """
         result = {
             'user_info' : {
                 'id'          : user.id,

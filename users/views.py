@@ -84,12 +84,13 @@ class UserDetailView(View):
             'name'        : user.name,
             'phone_number': user.phone_number,
             'address'     : user.address,
+            'point'       : 100000,
             'reviews'     : [{
                 'review_id'   : review.id,
                 'product_name': review.product.name,
                 'content'     : review.content,
-                'created_at'  : review.created_at,
-                'updated_at'  : review.updated_at
+                'created_at'  : review.created_at.date(),
+                'updated_at'  : review.updated_at.date()
             } for review in Review.objects.filter(user_id=user.id)]
         }
 

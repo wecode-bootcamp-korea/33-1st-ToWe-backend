@@ -8,12 +8,8 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
-<<<<<<< feature/like
-from .models import  User
-=======
 from .models import User
 from products.models import Review
->>>>>>> main
 from towe.utils import login_decorator
 from .validator import validate_email, validate_password
 

@@ -90,7 +90,6 @@ class LikeView(View):
                 message = 'DELETED'
                 status = 204
             else:
-                like.save()
                 message = 'CREATED'
                 status = 201
                 

@@ -79,12 +79,15 @@ class UserDetailView(View):
         
         user   = request.user
         result = {
-            'id'          : user.id,
-            'email'       : user.email,
-            'name'        : user.name,
-            'phone_number': user.phone_number,
-            'address'     : user.address,
-            'point'       : 100000,
+            'user_info' : {
+                'id'          : user.id,
+                'email'       : user.email,
+                'name'        : user.name,
+                'phone_number': user.phone_number,
+                'address'     : user.address,
+                'profile_img' : user.profile_img_url,
+                'point'       : user.point,
+            },
             'reviews'     : [{
                 'review_id'   : review.id,
                 'product_name': review.product.name,

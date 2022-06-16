@@ -85,7 +85,7 @@
 # 33-1st-ToWe-backend
 정병휘, 정치영
 
-## 6. Back-end 기능 구현
+## Back-end 기능 구현
 
 ### 1. ERD
 
